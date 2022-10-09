@@ -14,7 +14,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,16 +21,13 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('test'),
       ),
       body: Center(
-        child:Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //signInWithAnonymousUser(),
-
-            // registerWithEmailAndPassword(),
-            // signInWithEmailAndPassword(),
-
-            // signInWithGoogle(),
-
+            signInWithAnonymousUser(),
+            registerWithEmailAndPassword(),
+            signInWithEmailAndPassword(),
+            signInWithGoogle(),
             signOut(),
           ],
         ),
