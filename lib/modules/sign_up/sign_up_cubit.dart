@@ -16,25 +16,30 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   UserCredential? userCredential;
   UserModel? userModel;
+  var signUpKey = GlobalKey<FormState>();
 
   void signUp() async {
     emit(SignUpLoading());
-    userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
-    )
-        .then((value) {
-      userModel = UserModel(
-        value.user!.email.toString(),
-        value.user!.displayName.toString(),
-        value.user!.phoneNumber.toString(),
-        value.user!.uid.toString(),
-      );
-      emit(SignUpSuccess());
-      return value;
-    }).catchError((err){
+    if(signUpKey.currentState!.validate()){
+      userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      )
+          .then((value) {
+        userModel = UserModel(
+          value.user!.email.toString(),
+          value.user!.displayName.toString(),
+          value.user!.phoneNumber.toString(),
+          value.user!.uid.toString(),
+        );
+        emit(SignUpSuccess());
+        return value;
+      }).catchError((err){
+        emit(SignUpError());
+      });
+    }else{
       emit(SignUpError());
-    });
+    }
   }
 }

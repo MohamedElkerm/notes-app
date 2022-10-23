@@ -22,7 +22,7 @@ void printFullText(text) {
   });
 }
 
-Widget defaultTextFormField({function,required controller ,required label,required hintText,required preFixIcon}){
+Widget defaultTextFormField({required validator,function,required controller ,required label,required hintText,required preFixIcon}){
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(
@@ -33,6 +33,7 @@ Widget defaultTextFormField({function,required controller ,required label,requir
       ),
     ),
     child: TextFormField(
+      validator: validator,
       onFieldSubmitted: (value){
         print(value);
       },

@@ -13,6 +13,8 @@ class SignInCubit extends Cubit<SignInState> {
 
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
+  var signInKey = GlobalKey<FormState>();
+
 
   void navigateToRegister(context) {
     navigateTo(context, const SignUpPage());
@@ -23,23 +25,27 @@ class SignInCubit extends Cubit<SignInState> {
 
   void signInWithEmailAndPassword() async {
     emit(SignInLoading());
-    userCredential = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
-    )
-        .then((value) {
-      userModel = UserModel(
-        value.user!.email.toString(),
-        value.user!.displayName.toString(),
-        value.user!.phoneNumber.toString(),
-        value.user!.uid.toString(),
-      );
-      print('success');
-      emit(SignInSuccess());
-      return value;
-    }).catchError((err) {
-      emit(SignInError(err.toString()));
-    });
+    if(signInKey.currentState!.validate()){
+      userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      )
+          .then((value) {
+        userModel = UserModel(
+          value.user!.email.toString(),
+          value.user!.displayName.toString(),
+          value.user!.phoneNumber.toString(),
+          value.user!.uid.toString(),
+        );
+        print('success');
+        emit(SignInSuccess());
+        return value;
+      }).catchError((err) {
+        emit(SignInError(err.toString()));
+      });
+    }else{
+      emit(SignInError('error'));
+    }
   }
 }

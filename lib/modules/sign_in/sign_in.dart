@@ -24,58 +24,75 @@ class SignInPage extends StatelessWidget {
           var bloc = BlocProvider.of<SignInCubit>(context);
           return Scaffold(
             body: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: [
-                    Image.asset(AppAssets().signInAndSignUpImage),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: defaultTextFormField(
-                        controller: bloc.emailController,
-                        label: 'E-Mail',
-                        hintText: 'example@gmail.com',
-                        preFixIcon: Icons.email,
+              child: Form(
+                key: bloc.signInKey,
+                child: Center(
+                  child: Column(
+                    children: [
+                      Image.asset(AppAssets().signInAndSignUpImage),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: defaultTextFormField(
+                          controller: bloc.emailController,
+                          label: 'E-Mail',
+                          hintText: 'example@gmail.com',
+                          preFixIcon: Icons.email,
+                          validator:(value){
+                            if(value.length<5){
+                              return 'Email is invalid';
+                            }else{
+                              return null;
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: defaultTextFormField(
-                        controller: bloc.passwordController,
-                        label: 'Password',
-                        hintText: '1234',
-                        preFixIcon: Icons.lock,
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: defaultTextFormField(
+                          validator:(value){
+                            if(value.length<5){
+                              return 'password is invalid';
+                            }else{
+                              return null;
+                            }
+                          },
+                          controller: bloc.passwordController,
+                          label: 'Password',
+                          hintText: '1234',
+                          preFixIcon: Icons.lock,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 50,
-                      width: 375,
-                      child: ConditionalBuilder(
-                          condition: state is SignInLoading,
-                          builder: (context)=>const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          fallback: (context)=>ElevatedButton(
-                            onPressed: () {
-                              //TODo: Navigate to home screen
-                              bloc.signInWithEmailAndPassword();
-                            },
-                            child: const Text('SIGN IN'),
-                          ),
+                      SizedBox(
+                        height: 50,
+                        width: 375,
+                        child: ConditionalBuilder(
+                            condition: state is SignInLoading,
+                            builder: (context)=>const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            fallback: (context)=>ElevatedButton(
+                              onPressed: () {
+                                //TODo: Navigate to home screen
+                                bloc.signInWithEmailAndPassword();
+                              },
+                              child: const Text('SIGN IN'),
+                            ),
+                        ),
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                         Text('Don\'t have account ?',style:TextStyle(color:AppColors().primary) ,),
-                        TextButton(
-                            onPressed: () {
-                              bloc.navigateToRegister(context);
-                            },
-                            child:const Text('Register'),
-                        )
-                      ],
-                    ),
-                  ],
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                           Text('Don\'t have account ?',style:TextStyle(color:AppColors().primary) ,),
+                          TextButton(
+                              onPressed: () {
+                                bloc.navigateToRegister(context);
+                              },
+                              child:const Text('Register'),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
