@@ -48,7 +48,27 @@ Widget defaultTextFormField({required validator,function,required controller ,re
   );
 }
 
+Widget note(){
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: ListTile(
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(20), // Image border
+        child: SizedBox.fromSize(
+          size: const Size.fromRadius(30), // Image radius
+          child: Image.network(
+              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+              fit: BoxFit.fill),
+        ),
+      ),
+      title: const Text('Task 1'),
+      subtitle: const Text(
+          'With new version of flutter and material theme u need to use the "Padding" widgett too in order to have an image that doesn\'t fill its container.'),
+      trailing: const Icon(Icons.edit),
 
+    ),
+  );
+}
 
 
 

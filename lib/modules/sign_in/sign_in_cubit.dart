@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase/helper/local/cahche_helper.dart';
 import 'package:firebase/models/user_model.dart';
 import 'package:firebase/modules/sign_up/sign_up.dart';
 import 'package:firebase/modules/widgets/shared_widgets.dart';
@@ -38,6 +39,7 @@ class SignInCubit extends Cubit<SignInState> {
           value.user!.phoneNumber.toString(),
           value.user!.uid.toString(),
         );
+        CacheHelper.saveData(key: 'uId',value: userModel!.uId);
         print('success');
         emit(SignInSuccess());
         return value;

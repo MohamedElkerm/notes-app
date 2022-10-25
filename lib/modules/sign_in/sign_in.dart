@@ -1,5 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:firebase/assets/assets.dart';
+import 'package:firebase/modules/home/home_screen.dart';
 import 'package:firebase/modules/sign_in/sign_in_cubit.dart';
 import 'package:firebase/modules/widgets/shared_widgets.dart';
 import 'package:firebase/test.dart';
@@ -17,7 +18,7 @@ class SignInPage extends StatelessWidget {
       child: BlocConsumer<SignInCubit, SignInState>(
         listener: (context, state) {
           if(state is SignInSuccess){
-            navigateToAndReplacement(context,const TestScreen());
+            navigateToAndReplacement(context,const HomeScreen());
           }
         },
         builder: (context, state) {

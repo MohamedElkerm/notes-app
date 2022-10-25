@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase/helper/local/cahche_helper.dart';
 import 'package:firebase/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class SignUpCubit extends Cubit<SignUpState> {
           value.user!.phoneNumber.toString(),
           value.user!.uid.toString(),
         );
+        CacheHelper.saveData(key: 'uId', value: userModel!.uId);
         emit(SignUpSuccess());
         return value;
       }).catchError((err){
