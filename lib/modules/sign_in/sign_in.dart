@@ -3,7 +3,6 @@ import 'package:firebase/assets/assets.dart';
 import 'package:firebase/modules/home/home_screen.dart';
 import 'package:firebase/modules/sign_in/sign_in_cubit.dart';
 import 'package:firebase/modules/widgets/shared_widgets.dart';
-import 'package:firebase/test.dart';
 import 'package:firebase/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

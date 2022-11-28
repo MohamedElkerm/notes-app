@@ -1,8 +1,8 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:firebase/assets/assets.dart';
+import 'package:firebase/modules/home/home_screen.dart';
 import 'package:firebase/modules/sign_up/sign_up_cubit.dart';
 import 'package:firebase/modules/widgets/shared_widgets.dart';
-import 'package:firebase/test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +21,7 @@ class _SignUpPageState extends State<SignUpPage> {
       child: BlocConsumer<SignUpCubit, SignUpState>(
         listener: (context, state) {
           if(state is SignUpSuccess){
-            navigateToAndReplacement(context,const TestScreen());
+            navigateToAndReplacement(context,const HomeScreen());
           }
         },
         builder: (context, state) {

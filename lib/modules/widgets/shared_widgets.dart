@@ -22,7 +22,7 @@ void printFullText(text) {
   });
 }
 
-Widget defaultTextFormField({required validator,function,required controller ,required label,required hintText,required preFixIcon}){
+Widget defaultTextFormField({initValue,required validator,function,required controller ,required label, hintText,required preFixIcon}){
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(
@@ -33,6 +33,7 @@ Widget defaultTextFormField({required validator,function,required controller ,re
       ),
     ),
     child: TextFormField(
+      initialValue: initValue,
       validator: validator,
       onFieldSubmitted: (value){
         print(value);
@@ -48,24 +49,30 @@ Widget defaultTextFormField({required validator,function,required controller ,re
   );
 }
 
-Widget note(){
+Widget note({required img , required title , required body, function,dissFunc}){
   return Padding(
     padding: const EdgeInsets.all(8.0),
-    child: ListTile(
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(20), // Image border
-        child: SizedBox.fromSize(
-          size: const Size.fromRadius(30), // Image radius
-          child: Image.network(
-              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
-              fit: BoxFit.fill),
+    child: Dismissible(
+      background:Container(decoration: BoxDecoration(color: Colors.red,borderRadius: BorderRadius.circular(5)),child: Row(children: [Icon(Icons.delete_forever)],)),
+      key: UniqueKey(),
+      onDismissed: dissFunc,
+      child: ListTile(
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(20), // Image border
+          child: SizedBox.fromSize(
+            size: const Size.fromRadius(30), // Image radius
+            child: Image.network(
+                img,
+                fit: BoxFit.fill),
+          ),
         ),
-      ),
-      title: const Text('Task 1'),
-      subtitle: const Text(
-          'With new version of flutter and material theme u need to use the "Padding" widgett too in order to have an image that doesn\'t fill its container.'),
-      trailing: const Icon(Icons.edit),
+        title:  Text(title),
+        subtitle:  Text(
+            body
+        ),
+        trailing: IconButton(icon:const Icon(Icons.edit),onPressed: (){function;},),
 
+      ),
     ),
   );
 }

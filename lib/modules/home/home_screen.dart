@@ -11,9 +11,13 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeCubit(),
-      child:BlocConsumer<HomeCubit,HomeState>(
-        listener: (context , state ){},
-        builder: (context , state ){
+      child: BlocConsumer<HomeCubit, HomeState>(
+        listener: (context, state) {
+          if (state is DataBaseSuccess) {
+            Navigator.pop(context);
+          }
+        },
+        builder: (context, state) {
           final bloc = BlocProvider.of<HomeCubit>(context);
           return Scaffold(
             appBar: AppBar(
@@ -30,19 +34,38 @@ class HomeScreen extends StatelessWidget {
                 )
               ],
             ),
-            body: ListView.separated(
-                separatorBuilder: (context, item) {
-                  return const Divider(
-                    thickness: 2,
-                  );
-                },
-                itemCount: 20,
-                itemBuilder: (context, item) {
-                  return note();
-                }),
+            body: StreamBuilder(
+              stream: bloc.noteRef,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.separated(
+                      separatorBuilder: (context, item) {
+                        return const Divider(
+                          thickness: 2,
+                        );
+                      },
+                      itemCount: snapshot.data!.size,
+                      itemBuilder: (context, item) {
+                        return note(
+                            img: snapshot.data!.docs[item].data()['note image url'],
+                            title: snapshot.data!.docs[item].data()['note title'],
+                            body: snapshot.data!.docs[item].data()['note content'],
+                            dissFunc:(DismissDirection dismissDirection){
+                              bloc.deleteNote(snapshot.data!.docs[item].id);
+                            } ,
+
+                        );
+                      });
+                } else {
+                  return const Center(child:  CircularProgressIndicator());
+                }
+              },
+            ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () {
+                bloc.showBottomSheetForData(context,state);
+              },
             ),
           );
         },
