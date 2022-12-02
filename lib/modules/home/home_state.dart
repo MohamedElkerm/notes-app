@@ -10,7 +10,11 @@ class LogOutErrorState extends HomeState {}
 class LogOutLoadingState extends HomeState {}
 class state extends HomeState {}
 
+class GetTokenError extends HomeState {}
+class GetTokenSuccess extends HomeState {}
+class GetTokenLoading extends HomeState {}
 
+class SuccessReadNotification extends HomeState {}
 
 class PickError extends HomeState {}
 class PickSuccess extends HomeState {}

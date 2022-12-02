@@ -5,13 +5,20 @@ import 'package:firebase/modules/home/home_screen.dart';
 import 'package:firebase/modules/sign_in/sign_in.dart';
 import 'package:firebase/themes/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 Widget startPoint =const SignInPage();
+
+Future backGroundMessage(RemoteMessage remoteMessage)async{
+  print('------------------------------------------------***********************************************');
+  print(remoteMessage.notification!.body);
+}
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await CacheHelper.init();
+  FirebaseMessaging.onBackgroundMessage(backGroundMessage);
   Bloc.observer = MyBlocObserver();
   CacheHelper.getData(key: 'uId')!=null?startPoint =const HomeScreen():startPoint =const SignInPage();
 

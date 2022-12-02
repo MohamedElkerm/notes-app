@@ -3,14 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'home_cubit.dart';
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit(),
+      create: (context) => HomeCubit()..getToken()..readNotificatio()..buttonNotification()..initiaMessage(),
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           if (state is DataBaseSuccess) {

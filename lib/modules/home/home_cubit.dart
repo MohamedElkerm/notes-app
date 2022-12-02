@@ -5,6 +5,7 @@ import 'package:firebase/helper/local/cahche_helper.dart';
 import 'package:firebase/modules/sign_in/sign_in.dart';
 import 'package:firebase/modules/widgets/shared_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
@@ -16,6 +17,43 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
+
+
+  var fbm = FirebaseMessaging.instance;
+  var fbm2 = FirebaseMessaging.onMessage;
+  var fbm3 = FirebaseMessaging.onMessageOpenedApp;
+
+  initiaMessage()async{
+    var msg =await fbm.getInitialMessage();
+    if(msg != null){
+      signOut(context);
+    }
+  }
+  void buttonNotification(){
+    fbm3.listen((event) {
+      print("BackGround **************************");
+      emit(SuccessReadNotification());
+    });
+  }
+  void getToken(){
+    var t;
+    emit(GetTokenLoading());
+    fbm.getToken().then((value){
+      t = value;
+      print("token : $value");
+      emit(GetTokenSuccess());
+    }).catchError((err){
+      emit(GetTokenError());
+    });
+  }
+  void readNotificatio()async{
+    print('++++++++++++++++++++++++++++++++++++++++++++');
+    await fbm2.listen((event) {
+       print('**********************************************');
+       print(event.notification!.body);
+      emit(SuccessReadNotification());
+    });
+  }
 
   void signOut(context) {
     emit(LogOutLoadingState());
