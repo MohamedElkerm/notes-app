@@ -208,11 +208,17 @@ class HomeCubit extends Cubit<HomeState> {
       .where('uId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
       .snapshots();
 
+  late var notes;
   getNotes() async {
     var UID = CacheHelper.getData(key: 'uId');
+    print(UID);
     var ref =
-        FirebaseFirestore.instance.collection('notes').where({'uId': UID});
+        FirebaseFirestore.instance.collection('notes').where('uId', isEqualTo: UID);
     return await ref.get().then((value) {
+      print("start get getting data in the firebase");
+      print(value.docs.length);
+      print(value.docs);
+      notes = value.docs;
       emit(GetNotesSuccess());
     }).catchError((err) {
       emit(GetNotesError());
@@ -239,7 +245,7 @@ class HomeCubit extends Cubit<HomeState> {
         context: context,
         builder: (context) {
           return const AlertDialog(
-            icon: Icon(Icons.highlight),
+            // icon: Icon(Icons.highlight),
             title: Text('First Alert'),
             content: Text('First Content For Alert'),
           );

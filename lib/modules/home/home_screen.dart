@@ -1,3 +1,4 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:firebase/modules/widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HomeCubit()..getToken()..readNotificatio()..buttonNotification()..initiaMessage(),
+      create: (context) => HomeCubit()..getToken()..readNotificatio()..buttonNotification()..initiaMessage()..getNotes(),
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           if (state is DataBaseSuccess) {
@@ -33,32 +34,27 @@ class HomeScreen extends StatelessWidget {
                 )
               ],
             ),
-            body: StreamBuilder(
-              stream: bloc.noteRef,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.separated(
-                      separatorBuilder: (context, item) {
-                        return const Divider(
-                          thickness: 2,
-                        );
-                      },
-                      itemCount: snapshot.data!.size,
-                      itemBuilder: (context, item) {
-                        return note(
-                            img: snapshot.data!.docs[item].data()['note image url'],
-                            title: snapshot.data!.docs[item].data()['note title'],
-                            body: snapshot.data!.docs[item].data()['note content'],
-                            dissFunc:(DismissDirection dismissDirection){
-                              bloc.deleteNote(snapshot.data!.docs[item].id);
-                            } ,
+            body: ConditionalBuilder(
+              condition: state is GetNotesSuccess,
+              builder: (context)=>ListView.separated(
+                  separatorBuilder: (context, item) {
+                    return const Divider(
+                      thickness: 2,
+                    );
+                  },
+                  itemCount: bloc.notes.length,
+                  itemBuilder: (context, item) {
+                    return note(
+                      img: bloc.notes[item]['note image url'],
+                      title: bloc.notes[item]['note title'],
+                      body: bloc.notes[item]['note content'],
+                      dissFunc:(DismissDirection dismissDirection){
+                        bloc.deleteNote(bloc.notes[item].id);
+                      } ,
 
-                        );
-                      });
-                } else {
-                  return const Center(child:  CircularProgressIndicator());
-                }
-              },
+                    );
+                  }),
+              fallback: (context)=>const Center(child: CircularProgressIndicator()),
             ),
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.add),
